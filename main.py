@@ -10,21 +10,27 @@ from core.claude import Claude
 from core.cli_chat import CliChat
 from core.cli import CliApp
 
-load_dotenv()
+load_dotenv(override=True)
 
-# Anthropic Config
-claude_model = os.getenv("CLAUDE_MODEL", "")
-anthropic_api_key = os.getenv("ANTHROPIC_API_KEY", "")
+gemini_model = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
+gemini_api_key = os.getenv("GEMINI_API_KEY", "")
+gemini_base_url = os.getenv(
+    "GEMINI_BASE_URL",
+    "https://generativelanguage.googleapis.com/v1beta/openai/",
+)
 
-
-assert claude_model, "Error: CLAUDE_MODEL cannot be empty. Update .env"
-assert anthropic_api_key, (
-    "Error: ANTHROPIC_API_KEY cannot be empty. Update .env"
+assert gemini_api_key and gemini_api_key != "your-gemini-api-key-here", (
+    "Error: GEMINI_API_KEY cannot be empty. "
+    "Get a free key at https://aistudio.google.com/apikey and add it to .env"
 )
 
 
 async def main():
-    claude_service = Claude(model=claude_model)
+    claude_service = Claude(
+        model=gemini_model,
+        api_key=gemini_api_key,
+        base_url=gemini_base_url,
+    )
 
     server_scripts = sys.argv[1:]
     clients = {}
