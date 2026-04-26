@@ -53,7 +53,6 @@ def get_document(doc_id: str) -> str:
     return docs[doc_id]
 
 
-# TODO: Write a prompt to rewrite a doc in markdown format
 @mcp.prompt(
     name="format",
     description="Rewrites the contents of the document in Markdown format."
