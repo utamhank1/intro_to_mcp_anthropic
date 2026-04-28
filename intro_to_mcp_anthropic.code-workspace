@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "intro_to_mcp_anthropic",
+			"path": "."
+		},
+		{
+			"name": "core",
+			"path": "../../../../Downloads/cli_project/core"
+		}
+	],
+	"settings": {}
+}

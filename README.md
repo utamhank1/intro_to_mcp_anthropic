@@ -5,19 +5,40 @@ MCP Chat is a command-line interface application that enables interactive chat c
 ## Prerequisites
 
 - Python 3.9+
-- Anthropic API Key
+- GCP CLI ([install guide](https://cloud.google.com/sdk/docs/install))
+- Vertex AI User role on GCP project `dev-app-286019`
 
 ## Setup
 
-### Step 1: Configure the environment variables
+### Step 1: Get GCP Access
 
-1. Create or edit the `.env` file in the project root and verify that the following variables are set correctly:
+Ask Evan Trippler or Christopher Bello to grant you the Vertex AI User role:
+
+```bash
+gcloud projects add-iam-policy-binding dev-app-286019 \
+  --member="user:YOUR_EMAIL@coalesce.io" \
+  --role="roles/aiplatform.user"
+```
+
+### Step 2: Authenticate with GCP
+
+```bash
+gcloud auth application-default login
+```
+
+This opens a browser — sign in with your `@coalesce.io` account. No Anthropic API key is needed; authentication is handled through your GCP credentials.
+
+### Step 3: Configure the environment variables
+
+Create or edit the `.env` file in the project root:
 
 ```
-ANTHROPIC_API_KEY=""  # Enter your Anthropic API secret key
+CLAUDE_MODEL="claude-sonnet-4-6"
+GCP_PROJECT_ID="dev-app-286019"
+GCP_REGION="us-east5"
 ```
 
-### Step 2: Install dependencies
+### Step 4: Install dependencies
 
 #### Option 1: Setup with uv (Recommended)
 
@@ -60,7 +81,7 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 2. Install dependencies:
 
 ```bash
-pip install anthropic python-dotenv prompt-toolkit "mcp[cli]==1.8.0"
+pip install "anthropic[vertex]" python-dotenv prompt-toolkit "mcp[cli]==1.8.0"
 ```
 
 3. Run the project
@@ -109,3 +130,9 @@ To fully implement the MCP features:
 ### Linting and Typing Check
 
 There are no lint or type checks implemented.
+
+## Troubleshooting
+
+- **404 / "model not found"** — Re-run `gcloud auth application-default login` and try again. If it persists, confirm your account has the Vertex AI User role on `dev-app-286019`.
+- **"quota exceeded" warning** — This is just a warning and can be ignored. If you hit actual quota issues, run: `gcloud auth application-default set-quota-project dev-app-286019`
+- **Credentials expire** — ADC tokens refresh automatically, but if you see auth errors after a long time, re-run `gcloud auth application-default login`.

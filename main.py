@@ -12,19 +12,18 @@ from core.cli import CliApp
 
 load_dotenv()
 
-# Anthropic Config
+# Vertex AI Config
 claude_model = os.getenv("CLAUDE_MODEL", "")
-anthropic_api_key = os.getenv("ANTHROPIC_API_KEY", "")
-
+gcp_project_id = os.getenv("GCP_PROJECT_ID", "")
+gcp_region = os.getenv("GCP_REGION", "")
 
 assert claude_model, "Error: CLAUDE_MODEL cannot be empty. Update .env"
-assert anthropic_api_key, (
-    "Error: ANTHROPIC_API_KEY cannot be empty. Update .env"
-)
+assert gcp_project_id, "Error: GCP_PROJECT_ID cannot be empty. Update .env"
+assert gcp_region, "Error: GCP_REGION cannot be empty. Update .env"
 
 
 async def main():
-    claude_service = Claude(model=claude_model)
+    claude_service = Claude(model=claude_model, project_id=gcp_project_id, region=gcp_region)
 
     server_scripts = sys.argv[1:]
     clients = {}

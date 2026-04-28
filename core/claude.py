@@ -1,10 +1,10 @@
-from anthropic import Anthropic
+from anthropic import AnthropicVertex
 from anthropic.types import Message
 
 
 class Claude:
-    def __init__(self, model: str):
-        self.client = Anthropic()
+    def __init__(self, model: str, project_id: str, region: str):
+        self.client = AnthropicVertex(project_id=project_id, region=region)
         self.model = model
 
     def add_user_message(self, messages: list, message):
